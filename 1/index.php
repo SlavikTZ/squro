@@ -1,17 +1,47 @@
-<?php include 'table.php' ?>
+<?php
+$arr = range(0,49);
+$arr['x']="";
+$arr['y']="1";
+$arr['7']="";
+function getTable($arr, $numColumn=7){
+    if(is_array($arr)&&($count = count($arr))!==0){
+        $rows = (int)($count/$numColumn)+1;
+        $str = "<table border=1>\n";
+        $str .= "\t<tr>";
+        $i=0;
+            foreach($arr as $value){
+                $i++;
+                $tmp = ($value!=="") ? $value:"";
+                $str .="\n\t\t<td>".$tmp."</td>";
+                    if($i%$numColumn===0){
+                        $str .="\n\t</tr>\n\t<tr>";
+                    }   
+                
+                
+            }
+            for($i; $i<$rows*$numColumn; $i++){
+                $str .="\n\t\t<td>Not</td>";
+            }
+        $str.="\n\t</tr>\n</table>";
+        return $str;
+    }
+}?>
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Document1</title>
+        <title>1</title>
+        <style>
+            td{
+                //border: 1px solid black;
+                padding: 25px;
+            }
+        </style>
     </head>
     <body>
-        <table border=1 cellspacing="0">
-            <?php 
-                $table = new Arr(10); 
-                $table->viewTable();
-            ?>
-        </table>
-
+        <?= getTable($arr); ?>    
     </body>
 </html>
+
+
+
