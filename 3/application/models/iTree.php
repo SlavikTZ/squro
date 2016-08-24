@@ -11,7 +11,6 @@
  * @author user
  */
 interface iTree {
-    public function create($params);
     public function view($params);
     public function add($params);
     public function rename($params);
