@@ -1,5 +1,5 @@
 <?php
-$arr = range(0,49);
+$arr = range(0,12);
 $arr['x']="";
 $arr['y']="1";
 $arr['7']="";
@@ -20,7 +20,7 @@ function getTable($arr, $numColumn=7){
                 
             }
             for($i; $i<$rows*$numColumn; $i++){
-                $str .="\n\t\t<td>Not</td>";
+                $str .="\n\t\t<td class=\"notArr\"></td>";
             }
         $str.="\n\t</tr>\n</table>";
         return $str;
@@ -35,6 +35,9 @@ function getTable($arr, $numColumn=7){
             td{
                 //border: 1px solid black;
                 padding: 25px;
+            }
+            td.notArr{
+                background: red;
             }
         </style>
     </head>
