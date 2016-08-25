@@ -11,28 +11,58 @@ and open the template in the editor.
   margin-top: 20px;
 }
 .wripper #tree {
-  border: 1px dashed blue;
-}
-.wripper #tree li {
+  border: 1px solid blue;
+  padding: 10px 5px 10px 15px;
   list-style: none;
 }
-.wripper #tree .child {
+.wripper .isRoot {
+  margin-left: 0;
+}
+.wripper .child {
   padding: 0;
   margin: 0;
 }
-.wripper #tree .child li {
+.wripper .child li {
   list-style: none;
 }
-.wripper #tree .Node {
+.wripper .Node {
   margin-left: 18px;
+  background-image: url(../images/i.gif);
+  background-position: top left;
+  background-repeat: repeat-y;
 }
-.wripper #tree .Expand {
+.wripper .Expand {
   width: 18px;
   height: 18px;
   float: left;
-  border: 1px solid red;
 }
-.wripper #tree .Content {
-  margin-left: 20px;
+.wripper .Content {
+  margin-left: 18px;
   min-height: 18px;
+}
+.wripper .ExpandOpen .Expand {
+  background-image: url(../images/expand_minus.gif);
+}
+.wripper .ExpandClosed .Expand {
+  background-image: url(../images/expand_plus.gif);
+}
+.wripper .ExpandLeaf .Expand {
+  background-image: url(../images/expand_leaf.gif);
+}
+.wripper ul.child > .ExpandLeaf:last-child {
+  background-image: url(../images/i_half.gif);
+  background-repeat: no-repeat;
+}
+.wripper .ExpandOpen .child {
+  display: block;
+}
+.wripper .ExpandClosed .child {
+  display: none;
+}
+.wripper .ExpandOpen .Expand,
+.wripper .ExpandClosed .Expand {
+  cursor: pointer;
+}
+.wripper .ExpandLeaf .Expand {
+  cursor: auto;
 }

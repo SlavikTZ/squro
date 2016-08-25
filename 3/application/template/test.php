@@ -1,6 +1,8 @@
-<?php if(isset($node['child'])): ?>
+<?php if(isset($node['root'])): ?>
+            <li class="IsRoot ExpandOpen">
+<?php elseif(isset($node['child'])): ?>
         <li class="Node ExpandOpen">
-<?php else: ?>
+<?php else: ?>            
         <li class="Node ExpandLeaf">
 <?php endif; ?>
             <div class="Expand"></div>

@@ -25,5 +25,6 @@
         
        <script src="/3/web/js/jquery.js"></script>
        <script src="/3/web/js/bootstrap.min.js"></script>
+       <script src ="/3/web/js/tree.js"></script>
     </body>
 </html>

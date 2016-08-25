@@ -10,30 +10,60 @@ and open the template in the editor.
 .wripper{
     margin-top: 20px;
     #tree{
-        border: 1px dashed blue;
-        li {
-               list-style: none; 
-            }
-        .child{
-            padding: 0;
-            margin: 0;
-            
-            li {
-               list-style: none; 
-            }
-        }
-        .Node{
-            margin-left: 18px;
-        }
-        .Expand{
-            width: 18px;
-            height: 18px;
-            float: left;
-            border: 1px solid red;
-        }
-        .Content{
-            margin-left:20px;
-            min-height: 18px;
+        border: 1px solid blue;
+        padding: 10px 5px 10px 15px; 
+        list-style: none;
+    }
+    .isRoot{
+        margin-left:0;
+    }
+    .child{
+        padding: 0;
+        margin: 0;
+        li{
+            list-style: none;
         }
     }
+    
+    .Node{
+        margin-left: 18px;
+        background-image : url(../images/i.gif);
+	background-position : top left;
+	background-repeat : repeat-y;
+    }
+    .Expand{
+        width: 18px;
+        height: 18px;
+        float: left;
+    }
+    .Content{
+        margin-left: 18px;
+        min-height: 18px;
+    }
+    .ExpandOpen .Expand { 
+        background-image: url(../images/expand_minus.gif); 
+    }
+    .ExpandClosed .Expand {
+        background-image: url(../images/expand_plus.gif);
+    }
+    
+    .ExpandLeaf .Expand {
+        background-image: url(../images/expand_leaf.gif);
+    }
+    ul.child>.ExpandLeaf:last-child {
+        background-image: url(../images/i_half.gif);
+	background-repeat : no-repeat;
+    }
+    .ExpandOpen .child{
+        display: block;
+    }
+    .ExpandClosed .child{
+        display: none;
+    }
+    .ExpandOpen .Expand, .ExpandClosed .Expand {
+	    cursor: pointer; 
+	}
+	.ExpandLeaf .Expand {
+	    cursor: auto; 
+	}
 }
