@@ -1,0 +1,38 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 25.08.2016, 9:52:45
+    Author     : user
+*/
+.wripper {
+  margin-top: 20px;
+}
+.wripper #tree {
+  border: 1px dashed blue;
+}
+.wripper #tree li {
+  list-style: none;
+}
+.wripper #tree .child {
+  padding: 0;
+  margin: 0;
+}
+.wripper #tree .child li {
+  list-style: none;
+}
+.wripper #tree .Node {
+  margin-left: 18px;
+}
+.wripper #tree .Expand {
+  width: 18px;
+  height: 18px;
+  float: left;
+  border: 1px solid red;
+}
+.wripper #tree .Content {
+  margin-left: 20px;
+  min-height: 18px;
+}

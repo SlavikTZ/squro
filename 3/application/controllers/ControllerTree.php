@@ -11,13 +11,14 @@
  *
  * @author Slavik
  */
-class ControllerTree {
+class ControllerTree extends Controller{
         public function actionAdd(){
             $tree = new SimpleTree();
             $optTree = Register::getSection("tree");
             $name = isset($_GET['name']) ? $_GET['name']:$optTree['name'];
             $pid = (int) isset($_GET['pid']) ? $_GET['pid']:$optTree['pid'];
             $tree->add(compact('name', 'pid'));
+            $this->actionView();
         }
         public function actionDelete(){
 
@@ -36,6 +37,7 @@ class ControllerTree {
         }
         public function actionView(){
             $tree = new SimpleTree();
-            $tree->view(NULL);
+            $context = $tree->view(NULL);
+            include '../application/view/tree.php';
         }
 }

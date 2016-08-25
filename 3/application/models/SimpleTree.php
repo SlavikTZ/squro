@@ -36,17 +36,18 @@ class SimpleTree extends Model implements iTree{
         
     }
     public function view($params){
-        debug($this->arr);
+        return $this->getHTML($this->arr);
     }
     public function add($params){
         $strSQL = "SELECT MAX(`id`) As max FROM `tree`";
         $result = $this->db->query($strSQL);
         $id = $result->fetchArray(SQLITE3_ASSOC);
-        
+        if(!$this->testPid($params['pid'])){
+            throw new Exception('Нет pid');
+        }
        $strSQL = "INSERT INTO `tree`(`id`, `parent_id`, `name`) 
                                      VALUES(:id, :parent_id, :name)";
          $stmt = $this->db->prepare($strSQL);
-         var_dump($params);
          $stmt->bindValue(":id", (int)$id['max']+1, SQLITE3_INTEGER);
          $stmt->bindValue(":parent_id", (int)$params['pid'], SQLITE3_INTEGER);
          $stmt->bindValue(":name", $params['name'], SQLITE3_TEXT);
@@ -74,10 +75,30 @@ class SimpleTree extends Model implements iTree{
                 
             }else{
                 $this->arr[$row['id']]=&$temp[$row['id']];
+                $this->arr[$row['id']]['root']='1';
             }
         }
     }
     public function __destruct(){
         
+    }
+    private function getHTML($tree){
+        $str = "";
+        foreach($tree as $node){
+            $str.=$this->getNode($node);
+        }
+        return $str;
+    }
+    private function getNode($node){
+        ob_start();
+        include "../application/template/test.php";
+        return ob_get_clean();
+    }
+    private function testPid($pid){
+        $strSQL = "SELECT `id` FROM `tree` WHERE `id`={$pid}";
+        if($this->db->query($strSQL)->fetchArray(SQLITE3_ASSOC)){
+            return true;
+        }
+            return false;
     }
 }
