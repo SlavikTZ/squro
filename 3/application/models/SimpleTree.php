@@ -49,6 +49,7 @@ class SimpleTree extends Model implements iTree{
          $stmt->bindValue(":name", $params['name'], SQLITE3_TEXT);
          $result = $stmt->execute();
          $stmt->close();
+         return $max_id;
     }
     public function rename($params){
         $this->testId($params['id']);
@@ -166,5 +167,12 @@ class SimpleTree extends Model implements iTree{
         $result = $this->db->query($strSQL);
         $pid = $result->fetchArray(SQLITE3_ASSOC);
         return $pid['parent_id'];
+    }
+    public function countChild($pid){
+        $strSQL = "SELECT COUNT(`id`) AS num FROM `tree` WHERE `parent_id`={$pid}";
+        $result = $this->db->query($strSQL);
+        $count = $result->fetchArray(SQLITE3_ASSOC);
+        return $count['num'];
+        
     }
 }

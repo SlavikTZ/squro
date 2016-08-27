@@ -19,7 +19,12 @@
                     <span class="glyphicon glyphicon-user"></span>
                 </div>
             </div>
+              <div class="menu">
+            <div class="add"><span class="glyphicon glyphicon-plus"></span>Добавить</div>
+            <div class="delete"><span class="glyphicon glyphicon-arrow-down"></span>Удалить</div>
         </div>
+        </div>
+          
        </div>
         
         

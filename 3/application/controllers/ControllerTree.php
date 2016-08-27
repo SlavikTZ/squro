@@ -17,7 +17,13 @@ class ControllerTree extends Controller{
             $optTree = Register::getSection("tree");
             $name = isset($_GET['name']) ? $_GET['name']:$optTree['name'];
             $pid = (int) isset($_GET['pid']) ? $_GET['pid']:$optTree['pid'];
-            $tree->add(compact('name', 'pid'));
+            $id = $tree->add(compact('name', 'pid'));
+            if($this->isAjax()){
+                $child = $tree->countChild($pid);
+                $data = ['id'=>$id, 'name'=>$name, 'child'=>$child];
+                echo json_encode($data);
+                return;
+            }
             $this->actionView();
         }
         public function actionDelete(){
@@ -42,7 +48,11 @@ class ControllerTree extends Controller{
                $name = $_GET['name'];
                $tree = new SimpleTree();
                $tree->rename(compact('id', 'name'));
-               return true;
+                   
+                   if($this->isAjax()){
+                       return "ok";
+                   }
+               
             }
             
         }
