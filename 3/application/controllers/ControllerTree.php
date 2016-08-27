@@ -21,7 +21,14 @@ class ControllerTree extends Controller{
             $this->actionView();
         }
         public function actionDelete(){
-
+            
+            if(isset($_GET['id'])){
+               $id = $_GET['id'];
+               $tree = new SimpleTree();
+               $tree->delete(compact('id'));
+                $this->actionView();
+            }
+            return false;
         }
         //public function actionCreate(){
         //    $tree = new SimpleTree();
@@ -29,11 +36,25 @@ class ControllerTree extends Controller{
         //    $tree->create(compact('name'));
 
         //}
-        public function actionRemove(){
+        public function actionRename(){
+            if(isset($_GET['id'])&&isset($_GET['name'])){
+               $id = $_GET['id'];
+               $name = $_GET['name'];
+               $tree = new SimpleTree();
+               $tree->rename(compact('id', 'name'));
+               return true;
+            }
             
         }
         public function actionMove(){
-
+            if(isset($_GET['id'])&&isset($_GET['pid'])){
+               $pid = $_GET['pid'];
+               $id = $_GET['id'];
+               $pos = isset($_GET['pos'])&&$_GET['pos']==='sister' ? $_GET['pos']:'child';
+               $tree = new SimpleTree();
+               $tree->move(compact('pid', 'id', 'pos'));
+               $this->actionView();
+            }
         }
         public function actionView(){
             $tree = new SimpleTree();

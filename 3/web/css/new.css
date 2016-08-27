@@ -37,8 +37,8 @@ and open the template in the editor.
   float: left;
 }
 .wripper .Content {
-  margin-left: 18px;
-  min-height: 18px;
+  cursor: move;
+  display: inline-block;
 }
 .wripper .ExpandOpen .Expand {
   background-image: url(../images/expand_minus.gif);
@@ -49,7 +49,9 @@ and open the template in the editor.
 .wripper .ExpandLeaf .Expand {
   background-image: url(../images/expand_leaf.gif);
 }
-.wripper ul.child > .ExpandLeaf:last-child {
+.wripper .child > li.ExpandLeaf:last-child,
+.wripper .child > li.ExpandClosed:last-child,
+.wripper .child > li.ExpandOpen:last-child {
   background-image: url(../images/i_half.gif);
   background-repeat: no-repeat;
 }

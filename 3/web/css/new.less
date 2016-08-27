@@ -37,8 +37,8 @@ and open the template in the editor.
         float: left;
     }
     .Content{
-        margin-left: 18px;
-        min-height: 18px;
+        cursor: move;
+        display: inline-block;
     }
     .ExpandOpen .Expand { 
         background-image: url(../images/expand_minus.gif); 
@@ -50,9 +50,9 @@ and open the template in the editor.
     .ExpandLeaf .Expand {
         background-image: url(../images/expand_leaf.gif);
     }
-    ul.child>.ExpandLeaf:last-child {
+    .child>li.ExpandLeaf:last-child, .child>li.ExpandClosed:last-child, .child>li.ExpandOpen:last-child{
         background-image: url(../images/i_half.gif);
-	background-repeat : no-repeat;
+        background-repeat : no-repeat;
     }
     .ExpandOpen .child{
         display: block;
