@@ -11,10 +11,10 @@
  * @author user
  */
 interface iTree {
-    public function view($params);
-    public function add($params);
-    public function rename($params);
-    public function delete($params);
-    public function move($params);
+    public function view($id);
+    public function add($name, $pid);
+    public function rename($id, $name);
+    public function delete($id);
+    public function move($id, $pid, $pos);
     //put your code here
 }

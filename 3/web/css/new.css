@@ -15,6 +15,7 @@ and open the template in the editor.
   border: 1px solid blue;
   padding: 10px 5px 10px 15px;
   list-style: none;
+  position: relative;
 }
 .wripper .isRoot {
   margin-left: 0;
@@ -75,15 +76,24 @@ and open the template in the editor.
 }
 .menu {
   position: absolute;
-  top: 9px;
-  left: 100px;
+  top: 20px;
+  left: 50px;
   border: 1px solid black;
   background: #ccc;
   min-width: 100px;
   color: green;
   display: none;
+  z-index: 100;
 }
 .menu .add,
 .menu .delete {
   cursor: pointer;
+}
+.move {
+  border: 1px dashed gray;
+  opacity: 0.5;
+  color: red;
+  display: inline-block;
+  position: absolute;
+  background: #ddd;
 }

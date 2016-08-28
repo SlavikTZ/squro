@@ -11,12 +11,15 @@
  *
  * @author Slavik
  */
-class Tree extends Model{
+class Tree  extends Model implements iTree{
     
-    public function __construct() {
+     public function __construct() {
         parent::__construct();
+        if(!Register::get('base', 'system')){
+            $this->createBase("Корень");
+        }
     }
-    public function create($params){
+    public function create($name){
         $data = Register::getSection('db');
         if(file_exists($data['path'].$data['file'])){
          $strSQL = "CREATE TABLE IF NOT EXISTS `tree` (
@@ -35,4 +38,26 @@ class Tree extends Model{
          $stmt->close();
         }
     }
+    
+    
+    public function view($id){
+        
+    }
+    public function add($name, $pid){
+        
+    }
+    public function rename($id, $name){
+        
+    }
+    public function delete($id){
+        
+    }
+    public function move($id, $pid, $pos=Null){
+        
+    }
+    
+    
+    
+    
+    
 }

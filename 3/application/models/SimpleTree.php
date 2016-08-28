@@ -15,10 +15,10 @@ class SimpleTree extends Model implements iTree{
     public function __construct() {
         parent::__construct();
         if(!Register::get('base', 'system')){
-            $this->createBase(['name'=>"Корень"]);
+            $this->createBase("Корень");
         }
     }
-    private function createBase($params){
+    private function createBase($name){
          $strSQL = "CREATE TABLE IF NOT EXISTS `tree` (
                         `id` INTEGER INTEGER PRIMARY KEY NOT NULL,
                         `parent_id` INTEGER NOT NULL,
@@ -28,41 +28,41 @@ class SimpleTree extends Model implements iTree{
                                         `name`) 
                                      VALUES(1, 0, :name)";
          $stmt = $this->db->prepare($strSQL);
-         $stmt->bindValue(":name", $params['name'], SQLITE3_TEXT);
+         $stmt->bindValue(":name", $name, SQLITE3_TEXT);
          $result = $stmt->execute();
          $stmt->close();
         
     }
-    public function view($params){
+    public function view($id=null){
         $tree = $this->getTree();
         return $this->getHTML($tree);
     }
-    public function add($params){
+    public function add($name, $pid){
        
         $max_id = $this->maxId()+1;
-        $this->testId($params['pid']);
+        $this->testId($pid);
        $strSQL = "INSERT INTO `tree`(`id`, `parent_id`, `name`) 
                                      VALUES(:id, :parent_id, :name)";
          $stmt = $this->db->prepare($strSQL);
          $stmt->bindValue(":id", $max_id, SQLITE3_INTEGER);
-         $stmt->bindValue(":parent_id", (int)$params['pid'], SQLITE3_INTEGER);
-         $stmt->bindValue(":name", $params['name'], SQLITE3_TEXT);
+         $stmt->bindValue(":parent_id", (int)$pid, SQLITE3_INTEGER);
+         $stmt->bindValue(":name", $name, SQLITE3_TEXT);
          $result = $stmt->execute();
          $stmt->close();
          return $max_id;
     }
-    public function rename($params){
-        $this->testId($params['id']);
-        $strSQL = "UPDATE `tree` SET `name`= :name WHERE `id` = {$params['id']}";
+    public function rename($id, $name){
+        
+        $this->testId($id);
+        $strSQL = "UPDATE `tree` SET `name`= :name WHERE `id` = {$id}";
         $stmt = $this->db->prepare($strSQL);
-        $stmt->bindValue(":name", $params['name'], SQLITE3_TEXT);
+        $stmt->bindValue(":name", $name, SQLITE3_TEXT);
         $result = $stmt->execute();
         $stmt->close();
         return true;
         
     }
-    public function delete($params){
-        $id = (int)$params['id'];
+    public function delete($id){
         if($id===1){
             return true;
         }
@@ -81,7 +81,7 @@ class SimpleTree extends Model implements iTree{
         
     }
     //недостаток данного дерева, поэтому нужно использовать nodeset
-    public function move($params){
+    public function move($id, $pid, $pos){
         extract($params); 
         if($id===1 && !$this->testId($id) && !$this->testId($pid)){
             throw new TreeException('Перемещение не возможно');
@@ -159,7 +159,7 @@ class SimpleTree extends Model implements iTree{
         $id = $result->fetchArray(SQLITE3_ASSOC);
         return $id['max'];
     }
-    private function getParent($id){
+    public function getParent($id){
         if($id==1){
             return 0;
         }

@@ -10,18 +10,24 @@
        <div class="wripper">
          <div class="container">
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-7">
                     <ul id="tree">
                         <?= $context; ?>  
                     </ul>
                 </div>
-                <div class="col-md-3">
-                    <span class="glyphicon glyphicon-user"></span>
+                <div class="col-md-5">
+                    
+                    <div class="help"><span class="glyphicon glyphicon-tree-deciduous"></span>Справка</div>
+                    <ul>
+                        <li>Добавить(Удалить) элемент правая кнопка миши</li>
+                        <li>Редактировать элемент двойной щелчек мыши, после чего Enter</li>
+                        <li>При перемещении, будет не упорядоченый список элементов(нужно использовать nod sets), можно сделать</li>
+                    </ul>
                 </div>
             </div>
               <div class="menu">
             <div class="add"><span class="glyphicon glyphicon-plus"></span>Добавить</div>
-            <div class="delete"><span class="glyphicon glyphicon-arrow-down"></span>Удалить</div>
+            <div class="delete"><span class="glyphicon glyphicon-remove"></span>Удалить</div>
         </div>
         </div>
           

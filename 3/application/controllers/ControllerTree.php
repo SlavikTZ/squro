@@ -17,7 +17,7 @@ class ControllerTree extends Controller{
             $optTree = Register::getSection("tree");
             $name = isset($_GET['name']) ? $_GET['name']:$optTree['name'];
             $pid = (int) isset($_GET['pid']) ? $_GET['pid']:$optTree['pid'];
-            $id = $tree->add(compact('name', 'pid'));
+            $id = $tree->add($name, $pid);
             if($this->isAjax()){
                 $child = $tree->countChild($pid);
                 $data = ['id'=>$id, 'name'=>$name, 'child'=>$child];
@@ -31,7 +31,12 @@ class ControllerTree extends Controller{
             if(isset($_GET['id'])){
                $id = $_GET['id'];
                $tree = new SimpleTree();
-               $tree->delete(compact('id'));
+               $pid = $tree->getParent($id);
+               $tree->delete($id);
+               if($this->isAjax()){
+                   echo $tree->countChild($pid);
+                   return;
+                   }
                 $this->actionView();
             }
             return false;
@@ -47,12 +52,12 @@ class ControllerTree extends Controller{
                $id = $_GET['id'];
                $name = $_GET['name'];
                $tree = new SimpleTree();
-               $tree->rename(compact('id', 'name'));
+               $tree->rename($id, $name);
                    
                    if($this->isAjax()){
-                       return "ok";
+                       return;
                    }
-               
+                $this->actionView();
             }
             
         }
@@ -62,7 +67,7 @@ class ControllerTree extends Controller{
                $id = $_GET['id'];
                $pos = isset($_GET['pos'])&&$_GET['pos']==='sister' ? $_GET['pos']:'child';
                $tree = new SimpleTree();
-               $tree->move(compact('pid', 'id', 'pos'));
+               $tree->move($id, $pid, $pos);
                $this->actionView();
             }
         }
