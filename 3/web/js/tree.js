@@ -71,10 +71,6 @@ $(function(){
                 $(".menu").appendTo(obj).css({display:"block"});
             }else if((event.button==0||window.event.button==1)&&event.ctrlKey){
                 var node = $(this).parent();
-                    
-                    if(node.hasClass('ExpandOpen')){
-                       node.removeClass('ExpandOpen').addClass('ExpandClosed');
-                    }
                 node.children('.Expand').remove();
                 node.addClass('move');
                 var offsetParent = $('#tree').offset();
@@ -96,7 +92,7 @@ $(function(){
        node.css({"top":y, "left":x});
        //console.log("x="+x+"y="+y);
    });
-   
+
    $('#tree').on('mouseup','.move', function(event){
        var node = $(this);
        node.offset({"top":node.data('top'),"left":node.data('left')});
