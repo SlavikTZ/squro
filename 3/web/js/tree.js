@@ -10,6 +10,10 @@ $(function(){
         },
          deleteNode: function(){
             
+        },
+        dropElement: function(event){
+            el = $(this);
+            el.toggleClass('drop');
         }
    }
  //Раскрыть закрыть узлы   
@@ -51,6 +55,10 @@ $(function(){
 
         //Добавить, удалить, переместить
    $('#tree').on('mousedown','div.Content', function(event){
+       if(!event){
+           event = window.event;
+           alert('window');
+       }
             if(event.button==2){
                 event.stopPropagation();
                 window.oncontextmenu = (function(event){
@@ -61,11 +69,12 @@ $(function(){
                 obj.css({position:"relative"});
                 var id = obj.id;
                 $(".menu").appendTo(obj).css({display:"block"});
-            }else if(event.button==0&&event.ctrlKey){
+            }else if((event.button==0||window.event.button==1)&&event.ctrlKey){
                 var node = $(this).parent();
-                if(node.hasClass('ExpandOpen')){
-                   node.removeClass('ExpandOpen').addClass('ExpandClosed');
-                }
+                    
+                    if(node.hasClass('ExpandOpen')){
+                       node.removeClass('ExpandOpen').addClass('ExpandClosed');
+                    }
                 node.children('.Expand').remove();
                 node.addClass('move');
                 var offsetParent = $('#tree').offset();
@@ -73,7 +82,10 @@ $(function(){
                 var x = event.pageX-offsetNode.left+offsetParent.left;
                 var y = event.pageY-offsetNode.top+offsetParent.top;
                 node.attr({"data-x":x, 
-                    "data-y":y});
+                            "data-y":y, 
+                            "data-top":offsetNode.top, 
+                            "data-left":offsetNode.left});
+                 $('#tree').on('mouseover','.Content:not(:has(.move))', Tree.dropElement);                
             }
    });
    
@@ -82,13 +94,15 @@ $(function(){
        x=event.pageX-node.data('x');
        y=event.pageY-node.data('y');
        node.css({"top":y, "left":x});
-       console.log("x="+x+"y="+y);
+       //console.log("x="+x+"y="+y);
    });
    
    $('#tree').on('mouseup','.move', function(event){
        var node = $(this);
+       node.offset({"top":node.data('top'),"left":node.data('left')});
        $("<div class='Expand'></div>").prependTo(node);
        node.removeClass('move');
+       $('#tree').off('mouseover','.Content:not(:has(.move))', Tree.dropElement);
    });
    
     $('#tree').on('click','div.add', function(event){
@@ -118,7 +132,7 @@ $(function(){
                      },
                      error: function(){
                          console.log("Ошибка");
-                     },
+                     }
             });   
    });
    
