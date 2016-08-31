@@ -72,7 +72,7 @@ class ControllerTree extends Controller{
             }
         }
         public function actionView(){
-            $tree = new SimpleTree();
+            $tree = new Tree();
             $context = $tree->view(NULL);
             include '../application/view/tree.php';
         }

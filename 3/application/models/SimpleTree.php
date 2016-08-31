@@ -112,7 +112,7 @@ class SimpleTree extends Model implements iTree{
         
         
     }
-    private function getTree(){
+    protected function getTree(){
         $strSQL = "SELECT `id`, `parent_id`, `name` From `tree`";
         if(@!$result = $this->db->query($strSQL)){
                 throw new BaseException("Таблица не создана");
@@ -133,19 +133,19 @@ class SimpleTree extends Model implements iTree{
     public function __destruct(){
         
     }
-    private function getHTML($tree){
+    protected function getHTML($tree){
         $str = "";
         foreach($tree as $node){
             $str.=$this->getNode($node);
         }
         return $str;
     }
-    private function getNode($node){
+    protected function getNode($node){
         ob_start();
         include "../application/template/test.php";
         return ob_get_clean();
     }
-    private function testId($id){
+    protected function testId($id){
         $strSQL = "SELECT `id` FROM `tree` WHERE `id`={$id}";
         $result = $this->db->query($strSQL);
         $id = $result->fetchArray(SQLITE3_ASSOC);
@@ -153,7 +153,7 @@ class SimpleTree extends Model implements iTree{
             throw new TreeException('Нет такого id');
         }
     }
-    private function maxId(){
+    protected function maxId(){
         $strSQL = "SELECT MAX(`id`) As max FROM `tree`";
         $result = $this->db->query($strSQL);
         $id = $result->fetchArray(SQLITE3_ASSOC);

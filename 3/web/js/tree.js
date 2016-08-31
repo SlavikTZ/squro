@@ -11,9 +11,9 @@ $(function(){
          deleteNode: function(){
             
         },
-        dropElement: function(event){
+        addDropElement: function(event){
             el = $(this);
-            el.toggleClass('drop');
+            el.addClass('drop');
         }
    }
  //Раскрыть закрыть узлы   
@@ -71,36 +71,26 @@ $(function(){
                 $(".menu").appendTo(obj).css({display:"block"});
             }else if((event.button==0||window.event.button==1)&&event.ctrlKey){
                 var node = $(this).parent();
-                node.children('.Expand').remove();
                 node.addClass('move');
-                var offsetParent = $('#tree').offset();
-                var offsetNode = $('.move').offset();
-                var x = event.pageX-offsetNode.left+offsetParent.left;
-                var y = event.pageY-offsetNode.top+offsetParent.top;
-                node.attr({"data-x":x, 
-                            "data-y":y, 
-                            "data-top":offsetNode.top, 
-                            "data-left":offsetNode.left});
-                 $('#tree').on('mouseover','.Content:not(:has(.move))', Tree.dropElement);                
+                if(node.hasClass('ExpandOpen')){
+                    node.toggleClass("ExpandOpen ExpandClosed");
+                    
+                }
+                node.children('.Expand').remove();
+                node.draggable({
+                                containment:'#tree',
+                                revert:true,
+                                stop:function(event, ui){
+                                    var node = $(this);
+                                    node.prepend("<div class='Expand'");
+                                    node.removeClass('move');
+                                },
+                              });
+                $('move').trigger('mosemove');
+                $('.Content').droppable({hoverClasss:"drop-el"});
             }
    });
-   
-   $('#tree').on('mousemove','.move', function(event){
-       var node= $(this);
-       x=event.pageX-node.data('x');
-       y=event.pageY-node.data('y');
-       node.css({"top":y, "left":x});
-       //console.log("x="+x+"y="+y);
-   });
-
-   $('#tree').on('mouseup','.move', function(event){
-       var node = $(this);
-       node.offset({"top":node.data('top'),"left":node.data('left')});
-       $("<div class='Expand'></div>").prependTo(node);
-       node.removeClass('move');
-       $('#tree').off('mouseover','.Content:not(:has(.move))', Tree.dropElement);
-   });
-   
+ 
     $('#tree').on('click','div.add', function(event){
            var obj = $(this).parent()
                             .css({display:'none'})
