@@ -51,7 +51,7 @@ class ControllerTree extends Controller{
             if(isset($_GET['id'])&&isset($_GET['name'])){
                $id = $_GET['id'];
                $name = $_GET['name'];
-               $tree = new SimpleTree();
+               $tree = new NestedTree();
                $tree->rename($id, $name);
                    
                    if($this->isAjax()){
@@ -77,13 +77,13 @@ class ControllerTree extends Controller{
             include '../application/view/tree.php';
         }
         public function actionTest(){
-            $newNode = new Node();
-            $newNode->parent_id=1;
-            $newNode->name="Новый элемент";
-            $newNode->left_key = 2;
-            $newNode->right_key = 2;
-            $newNode->level = 2;
-            
-            $newNode->save();
+//            $newNode = new Node();
+//            $newNode->parent_id=1;
+//            $newNode->name="Новый элемент";
+//            $newNode->left_key = 2;
+//            $newNode->right_key = 2;
+//            $newNode->level = 2;
+//            
+//            $newNode->save();
         }
 }

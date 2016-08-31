@@ -38,20 +38,24 @@ class NestedTree  extends Tree{
     }
     
     public function add($name, $pid){
-        if($node = new Node($pid)){
-            throw new TreeException("Нет элемента с ключом {$pid}");
-        }
-        
-//        $strSQL = "UPDATE `tree` SET `left_key`=`left_key`+2,"
-//                . "`right_key`=`right_key`+2 WHERE `left_key`>{$node->right_key}";
-//        
-//        $strSQL[1] = "UPDATE `tree` SET `right_key` = `right_key` + 2 "
-//                . "WHERE `right_key`>=:right_key AND `left_key`<:right_key";
-//        $paramRequest[1] = $paramRequest[0];
+       $node = new Node($pid);
+       $strSQL = "UPDATE `tree` SET `right_key`=`right_key`+2, ".
+               "`left_key`= CASE WHEN `left_key`>".$node->right_key.
+               " THEN `left_key`+2 ELSE `left_key` END"
+                . " WHERE `right_key`>=".$node->right_key;
+        $result = $this->db->query($strSQL);
         $newNode = new Node();
+        $newNode->parent_id = $node->id;
+        $newNode->name = $name;
+        $newNode->left_key = $node->right_key;
+        $newNode->right_key = $node->right_key+1;
+        $newNode->level = $node->level+1;
+        $newNode->save();
     }
     public function rename($id, $name){
-        
+        $node = new Node($id);
+        $node->name = $name;
+        $node->save();
     }
     public function delete($id){
         

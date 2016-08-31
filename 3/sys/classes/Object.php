@@ -27,7 +27,7 @@ abstract class Object extends Model{
         $this->_getLabels();
         if($id){
             if(!$this->_select($id)){
-                return null;
+                throw new ObjectException("Нет элемента с ключом {$id}");
             }else{
             }
         }else{
@@ -60,6 +60,8 @@ abstract class Object extends Model{
     public function save(){
         if($this->id===null){
             $this->_insert();
+        }else{
+            $this->_update();
         }
     }
     private function _insert(){
@@ -85,23 +87,46 @@ abstract class Object extends Model{
              if(!$result=$stmt->execute()){
                     throw new Exception("Ошибка базы данных");
             }
-            
-            $strSQL = "SELECT LAST_INSERT_ID()";
-            debug($this->db->query($strSQL));
+            $this->id = $this->db->lastInsertRowID();
+            $stmt->close();
     }
     private function _update(){
-        
+        $strSQL = "SELECT * FROM `{$this->_tableName}` WHERE id={$this->id}";
+        $result = $this->db->query($strSQL);
+         if(!$result){
+            throw new Exception("Не возможно обновить данные, поскольку нет ID в базе данных");
+        }
+        $strSQL = "UPDATE `".$this->_tableName."` SET ";
+        while($columns = $result->fetchArray(SQLITE3_ASSOC)){
+            foreach($columns as $column=>$value){
+                if($this->_valuesTable[$column]!==$value){
+                    $strSQL .= "`".$column."`=:".$column.", ";
+                    $tmp[$column]=$this->_valuesTable[$column];
+                }
+            }
+            $strSQL = $strSQL = substr($strSQL, 0, strlen($strSQL)-2)
+                            ." WHERE id=".$this->id;
+        }
+        echo $strSQL;
+         $stmt = $this->db->prepare($strSQL); 
+         debug($tmp);
+         foreach ($tmp as $column => $value) {
+             $stmt->bindValue(":".$column, $value, $this->_types[$this->_lablesTable[$column]]);
+         }
+         $result = $stmt->execute();
+         $stmt->close();
     }
     private function _select($id){
         $strSQL = "SELECT * FROM `{$this->_tableName}` WHERE id={$id}";
         $result = $this->db->query($strSQL);
-        if(!$result){
+        if(!$row = $result->fetchArray(SQLITE3_ASSOC)){
             return false;
         }
-        while($columns = $result->fetchArray(SQLITE3_ASSOC)){
-            foreach($columns as $column=>$value){
+        
+            foreach($row as $column=>$value){
                 $this->_valuesTable[$column]=$value;
             }
-        }
+            
+        return true;
     }
 }

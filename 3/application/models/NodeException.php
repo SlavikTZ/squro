@@ -7,18 +7,10 @@
  */
 
 /**
- * Description of Model
+ * Description of NodeException
  *
- * @author user
+ * @author Slavik
  */
-abstract class Model{
-    protected $db;
-    
-    public function __construct(){
-      $this->db=Db::Connection(); 
-    }
-    public function __destruct(){
-        $this->db->close();
-    }
+class NodeException extends Exception{
     //put your code here
 }

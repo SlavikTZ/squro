@@ -18,9 +18,7 @@ abstract class Tree extends Model implements iTree{
             $this->createBase("Корень");
         }
     }
-    protected function createBase($name){
-        
-    }
+    abstract protected function createBase($name);
     public function view($id=null){
         $tree = $this->getTree();
         return $this->getHTML($tree);

@@ -69,7 +69,7 @@ $(function(){
                 obj.css({position:"relative"});
                 var id = obj.id;
                 $(".menu").appendTo(obj).css({display:"block"});
-            }else if((event.button==0||window.event.button==1)&&event.ctrlKey){
+            }else if((event.witch===1)&&event.ctrlKey){
                 var node = $(this).parent();
                 node.addClass('move');
                 if(node.hasClass('ExpandOpen')){
@@ -106,6 +106,7 @@ $(function(){
                             if(expand.hasClass('ExpandClosed')){
                                 expand.addClass('ExpandOpen').removeClass('ExpandClosed');
                             }
+                            alert(res);
                          data = JSON.parse(res);
                          if(data.child===1){
                              $("<ul class='child'></ul>").insertAfter(obj);
