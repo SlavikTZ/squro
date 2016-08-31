@@ -51,6 +51,7 @@ class NestedTree  extends Tree{
         $newNode->right_key = $node->right_key+1;
         $newNode->level = $node->level+1;
         $newNode->save();
+        return $newNode;
     }
     public function rename($id, $name){
         $node = new Node($id);

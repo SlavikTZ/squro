@@ -17,14 +17,16 @@ class ControllerTree extends Controller{
             $optTree = Register::getSection("tree");
             $name = isset($_GET['name']) ? $_GET['name']:$optTree['name'];
             $pid = (int) isset($_GET['pid']) ? $_GET['pid']:$optTree['pid'];
-            $id = $tree->add($name, $pid);
+            $node = $tree->add($name, $pid);
             if($this->isAjax()){
-                $child = $tree->countChild($pid);
-                $data = ['id'=>$id, 'name'=>$name, 'child'=>$child];
+                $child = $node->getCountChildren($pid);
+                $data = ['id'=>$node->id, 'name'=>$name, 'child'=>$child];
                 echo json_encode($data);
                 return;
+            }else{
+                $this->actionView();
             }
-            $this->actionView();
+            
         }
         public function actionDelete(){
             

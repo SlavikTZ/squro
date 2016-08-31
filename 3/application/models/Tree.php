@@ -25,7 +25,7 @@ abstract class Tree extends Model implements iTree{
     }
     protected function getTree(){
         $strSQL = "SELECT `id`, `parent_id`, `name` From `tree`";
-        if(@!$result = $this->db->query($strSQL)){
+        if(!$result = $this->db->query($strSQL)){
                 throw new BaseException("Таблица не создана");
             }
         while($row = $result->fetchArray(SQLITE3_ASSOC)){

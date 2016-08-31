@@ -106,7 +106,6 @@ $(function(){
                             if(expand.hasClass('ExpandClosed')){
                                 expand.addClass('ExpandOpen').removeClass('ExpandClosed');
                             }
-                            alert(res);
                          data = JSON.parse(res);
                          if(data.child===1){
                              $("<ul class='child'></ul>").insertAfter(obj);
