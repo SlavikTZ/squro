@@ -13,7 +13,7 @@
  */
 class ControllerTree extends Controller{
         public function actionAdd(){
-            $tree = new SimpleTree();
+            $tree = new NestedTree();
             $optTree = Register::getSection("tree");
             $name = isset($_GET['name']) ? $_GET['name']:$optTree['name'];
             $pid = (int) isset($_GET['pid']) ? $_GET['pid']:$optTree['pid'];
@@ -72,8 +72,18 @@ class ControllerTree extends Controller{
             }
         }
         public function actionView(){
-            $tree = new Tree();
+            $tree = new NestedTree();
             $context = $tree->view(NULL);
             include '../application/view/tree.php';
+        }
+        public function actionTest(){
+            $newNode = new Node();
+            $newNode->parent_id=1;
+            $newNode->name="Новый элемент";
+            $newNode->left_key = 2;
+            $newNode->right_key = 2;
+            $newNode->level = 2;
+            
+            $newNode->save();
         }
 }

@@ -11,14 +11,11 @@
  *
  * @author Slavik
  */
-class SimpleTree extends Model implements iTree{
+class SimpleTree extends Tree{
     public function __construct() {
         parent::__construct();
-        if(!Register::get('base', 'system')){
-            $this->createBase("Корень");
-        }
     }
-    private function createBase($name){
+    protected function createBase($name){
          $strSQL = "CREATE TABLE IF NOT EXISTS `tree` (
                         `id` INTEGER INTEGER PRIMARY KEY NOT NULL,
                         `parent_id` INTEGER NOT NULL,
@@ -33,10 +30,7 @@ class SimpleTree extends Model implements iTree{
          $stmt->close();
         
     }
-    public function view($id=null){
-        $tree = $this->getTree();
-        return $this->getHTML($tree);
-    }
+
     public function add($name, $pid){
        
         $max_id = $this->maxId()+1;
@@ -111,39 +105,6 @@ class SimpleTree extends Model implements iTree{
         }
         
         
-    }
-    protected function getTree(){
-        $strSQL = "SELECT `id`, `parent_id`, `name` From `tree`";
-        if(@!$result = $this->db->query($strSQL)){
-                throw new BaseException("Таблица не создана");
-            }
-        while($row = $result->fetchArray(SQLITE3_ASSOC)){
-            $temp[$row['id']]['name']=$row['name'];
-            $temp[$row['id']]['id']=$row['id'];
-            if($row['parent_id']<>0){
-                $temp[$row['parent_id']]['child'][$row['id']] = &$temp[$row['id']];
-                
-            }else{
-                $tree[$row['id']]=&$temp[$row['id']];
-                $tree[$row['id']]['root']='1';
-            }
-        }
-        return $tree;
-    }
-    public function __destruct(){
-        
-    }
-    protected function getHTML($tree){
-        $str = "";
-        foreach($tree as $node){
-            $str.=$this->getNode($node);
-        }
-        return $str;
-    }
-    protected function getNode($node){
-        ob_start();
-        include "../application/template/test.php";
-        return ob_get_clean();
     }
     protected function testId($id){
         $strSQL = "SELECT `id` FROM `tree` WHERE `id`={$id}";
