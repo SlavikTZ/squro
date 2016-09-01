@@ -1,7 +1,6 @@
 <?php
 return [
             '^tree\/?$'=>'tree/view', 
-            '^(tree)/([a-z]+)'=>'$1/$2',
-            '(3/tree/)([a-z]+)'=>'tree/$2',
+            '(3/)?(tree/)?(tree/)?([a-z]+)'=>'tree/$4',
              '^$'=>"tree/view",
         ];

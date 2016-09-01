@@ -13,12 +13,17 @@
  */
 abstract class Model{
     protected $db;
-    
+    static private $numConection =0;
     public function __construct(){
-      $this->db=Db::Connection(); 
+      $this->db=Db::Connection();
+      self::$numConection++;
     }
-    public function __destruct(){
-        $this->db->close();
+    public function __destruct()
+    {
+        self::$numConection--;
+        if(self::$numConection===0){
+            $this->db->close();
+        }
     }
     //put your code here
 }

@@ -87,8 +87,9 @@ abstract class Object extends Model{
              if(!$result=$stmt->execute()){
                     throw new Exception("Ошибка базы данных");
             }
-            $this->id = $this->db->lastInsertRowID();
             $stmt->close();
+            $this->id = $this->db->lastInsertRowID();
+            
     }
     private function _update(){
         $strSQL = "SELECT * FROM `{$this->_tableName}` WHERE id={$this->id}";

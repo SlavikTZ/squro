@@ -18,9 +18,10 @@ class ControllerTree extends Controller{
             $name = isset($_GET['name']) ? $_GET['name']:$optTree['name'];
             $pid = (int) isset($_GET['pid']) ? $_GET['pid']:$optTree['pid'];
             $node = $tree->add($name, $pid);
+            
             if($this->isAjax()){
                 $child = $node->getCountChildren($pid);
-                $data = ['id'=>$node->id, 'name'=>$name, 'child'=>$child];
+                $data = ['id'=>$node->id, 'name'=>$name];
                 echo json_encode($data);
                 return;
             }else{
@@ -32,8 +33,8 @@ class ControllerTree extends Controller{
             
             if(isset($_GET['id'])){
                $id = $_GET['id'];
-               $tree = new SimpleTree();
-               $pid = $tree->getParent($id);
+               $tree = new NestedTree();
+               //$pid = $tree->getParent($id);
                $tree->delete($id);
                if($this->isAjax()){
                    echo $tree->countChild($pid);

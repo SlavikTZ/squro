@@ -59,7 +59,19 @@ class NestedTree  extends Tree{
         $node->save();
     }
     public function delete($id){
-        
+        $node = new Node($id);
+        $strSQL = "DELETE FROM `tree` WHERE  `left_key`>=".$node->left_key
+                    ." AND `right_key`<=".$node->right_key;
+        $result = $this->db->query($strSQL);
+        $new_key = $node->right_key-$node->left_key+1;
+        $strSQL = "UPDATE `tree` SET `left_key`= CASE WHEN `left_key` >".$node->left_key
+                ." THEN `left_key`-".$new_key." ELSE `left_key` END, `right_key` = "
+                ."`right_key`-".$new_key." WHERE `right_key`>".$node->right_key;
+        $result = $this->db->query($strSQL);
+       
+    }
+    protected function getTreeSQL() {
+        return "SELECT `id`, `parent_id`, `name` FROM `tree` ORDER BY 'left_key'";
     }
     public function move($id, $pid, $pos=Null){
         
@@ -69,7 +81,7 @@ class NestedTree  extends Tree{
     }
     public function test(){
        
-    }    
+    }
     
     
     

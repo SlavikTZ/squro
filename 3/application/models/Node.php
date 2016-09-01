@@ -15,8 +15,8 @@ class Node extends Object{
     public function __construct($id=null) {
         parent::__construct($id);
     }
-    public function getCountChildren($pid){
-        $strSQL = "SELECT COUNT(`id`) AS num FROM `{$this->_tableName}` WHERE `parent_id`={$pid}";
+    public function getCountChildren(){
+        $strSQL = "SELECT COUNT(`id`) AS num FROM `{$this->_tableName}` WHERE `parent_id`={$this->id}";
         $result = $this->db->query($strSQL);
         $count = $result->fetchArray(SQLITE3_ASSOC);
         return $count['num'];

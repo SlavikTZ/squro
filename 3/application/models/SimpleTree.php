@@ -136,4 +136,7 @@ class SimpleTree extends Tree{
         return $count['num'];
         
     }
+    protected function getTreeSQL() {
+        return "SELECT `id`, `parent_id`, `name` FROM `tree`";
+    }
 }

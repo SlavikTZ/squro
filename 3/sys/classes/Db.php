@@ -24,7 +24,6 @@ class Db {
     }
    
     public function __destruct(){
-        
     }
     //put your code here
 }
