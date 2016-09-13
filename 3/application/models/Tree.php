@@ -20,7 +20,11 @@ abstract class Tree extends Model implements iTree{
     }
     abstract protected function createBase($name);
     public function view($id=null){
+        if(!$this->isRows()){
+            $this->createBase("Корень");
+        }    
         $tree = $this->getTree();
+        //debug($tree);
         return $this->getHTML($tree);
     }
     protected function getTree(){
@@ -53,5 +57,11 @@ abstract class Tree extends Model implements iTree{
         ob_start();
         include "../application/template/test.php";
         return ob_get_clean();
+    }
+    protected function isRows(){
+        $strSQL = "SELECT COUNT(*) AS num FROM 'tree'";
+        $result = $this->db->query($strSQL);
+        $c = $result->fetchArray(SQLITE3_ASSOC);
+        return $c['num'];       
     }
 }

@@ -15,6 +15,7 @@ and open the template in the editor.
   border: 1px solid blue;
   padding: 10px 5px 10px 15px;
   list-style: none;
+  position: relative;
 }
 .wripper .isRoot {
   margin-left: 0;
@@ -94,7 +95,15 @@ and open the template in the editor.
   color: red;
   display: inline-block;
   position: absolute;
+  cursor: move;
   background: #ddd;
+}
+.hov {
+  background: blue;
+  color: white;
+}
+.drag {
+  display: none;
 }
 .drop-el {
   background: blue;

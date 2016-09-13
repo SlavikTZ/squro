@@ -1,3 +1,51 @@
+var debug = function debug(o){
+    console.log(var_dump(o));
+}
+function classOf(o){
+    if(o===null){
+        return "Null";
+    }else if(o===undefined){
+        return "Undefined";
+    }else{
+      return typeof o;
+    }
+}
+var isArray = function(o){
+    return typeof o==="object"&&Object.prototype.toString.call(o)==="[object Array]";
+}
+function var_dump(o, tab){
+    var str = "";
+    var type=typeof o;
+        if(tab===undefined){
+            tab="";
+        }
+    if(type==="object"){    
+        str += "\n"+tab+"{";
+            for(prop in o){
+                if(typeof o[prop]==="object"){               
+                   var tmpTab = tab+"  ";
+                   str+="\n  "+tab+prop+":";
+                   str+=var_dump(o[prop], tmpTab);
+                   str +=",";
+                }else{
+                    str += "\n  "+tab+prop+": "+o[prop]+",";
+                }
+            }
+            str = str.substr(0,str.length-1);
+            str += "\n"+tab+"}";
+            return str;
+    }else if(type === 'Array'){
+        str+="["
+        for(var i =0; i<o.length; i++){
+            str+=o[i]+", ";
+        }
+        str+="],";
+    }else{
+        return o.toString();
+    }
+}
+
+
 $(function(){
    var Tree = {
        triger: function(){
@@ -59,7 +107,7 @@ $(function(){
            event = window.event;
            alert('window');
        }
-            if(event.button==2){
+            if(event.which===3){
                 event.stopPropagation();
                 window.oncontextmenu = (function(event){
                     return false;
@@ -69,28 +117,126 @@ $(function(){
                 obj.css({position:"relative"});
                 var id = obj.id;
                 $(".menu").appendTo(obj).css({display:"block"});
-            }else if((event.witch===1)&&event.ctrlKey){
+                
+            }else if((event.which===1)&&event.ctrlKey){
                 var node = $(this).parent();
-                node.addClass('move');
-                if(node.hasClass('ExpandOpen')){
-                    node.toggleClass("ExpandOpen ExpandClosed");
-                    
-                }
-                node.children('.Expand').remove();
-                node.draggable({
-                                containment:'#tree',
-                                revert:true,
-                                stop:function(event, ui){
-                                    var node = $(this);
-                                    node.prepend("<div class='Expand'");
-                                    node.removeClass('move');
-                                },
-                              });
-                $('move').trigger('mosemove');
-                $('.Content').droppable({hoverClasss:"drop-el"});
+                if(node.hasClass("IsRoot")) return;
+                var parentNode = node.parent();
+                var tree = $("#tree");
+                var memoryNode;
+                    if(parentNode.children().length===1){
+                        memoryNode=parentNode.parent().removeClass('ExpandClosed ExpandOpen').addClass('ExpandLeaf');
+                        node.parent().remove();
+                        memoryNode.attr({"data-memory":"child"});
+                    }else{
+                          if((memoryNode=node.prev()).length!==0){
+                            memoryNode.attr({"data-memory":"prev"});
+                          }else if((memoryNode= node.next()).length!==0){
+                            memoryNode.attr({"data-memory":"next"});
+                          }
+                    }
+                    memoryNode.addClass('memory');
+                    var avatar = $('<div class="move">'+node.children('.Content').text()+'</div>');
+                    node.appendTo("body").addClass('drag');
+                    avatar.appendTo("#tree");
+                    var top = parseInt(event.pageY-tree.offset().top-avatar.height()/2);
+                    var left = parseInt(event.pageX-tree.offset().left-avatar.width()/2);
+                    avatar.css({"left":left,"top":top});
             }
    });
- 
+   
+   $('#tree').on("mousemove",".move", function(event){
+        var avatar = $(this);
+        var tree = $("#tree");
+        var top = parseInt(event.pageY-tree.offset().top-avatar.height()/2);
+        var left = parseInt(event.pageX-tree.offset().left-avatar.width()/2);
+        avatar.css({"left":left, "top":top});
+        avatar.hide();
+        var node = $(document.elementFromPoint(event.clientX, event.clientY));
+        avatar.show();
+        var idDropCurrent = node.data("id");
+        var idDropPrev = avatar.data("id");
+            if(node.hasClass("Content")){
+                if(idDropCurrent===idDropPrev){
+                    
+                }else{
+                    var prevNode = $("#id"+idDropPrev);
+                        if(prevNode.length===1){
+                           prevNode.removeClass('hov').removeAttr("id");
+                        }
+                    avatar.data('id',idDropCurrent);
+                    node.addClass('hov');
+                    node.attr("id","id"+idDropCurrent);
+                }
+            }else{
+                var prevNode = $("#id"+idDropPrev);
+                        if(prevNode.length===1){
+                           prevNode.removeClass('hov').removeAttr("id");
+                        }
+                    avatar.removeData('id');
+            }
+   });
+   
+   $('#tree').on("mouseup",".move", function(event){
+       var avatar = $(this);
+       var pid = avatar.data("id"); 
+       var parentContent = $("#id"+pid).removeClass('hov');
+       $('.move').remove();
+       var memoryNode = $('.memory').removeClass('memory');
+       
+        //Вернуть всё в исходное состояние    
+           if(parentContent.length!==1){
+               var node = $(".drag").removeClass('drag');
+               if(memoryNode.data('memory')==='child'){
+                   memoryNode.addClass('ExpandOpen')
+                             .removeClass('ExpandLeaf')
+                             .append("<ul class='child'></ul>");
+                   memoryNode.children('.child').append(node);
+               }else if(memoryNode.data('memory')==='prev'){
+                   memoryNode.after(node);
+               }else if(memoryNode.data('memory')==='next'){
+                   memoryNode.before(node);
+               }
+               memoryNode.removeAttr('data-memory');
+               return;
+           }
+        //перенести ветку
+        memoryNode.removeData('memory');
+        var node = $('.drag');
+        var id = node.children(".Content").data("id");
+        $.ajax({
+                     url: 'tree/move',
+                     method: 'GET',
+                     data:{id:id,pid:pid},
+                     success: function(res){
+                         if(res==="ok"){
+                             var parentNode = parentContent.parent();
+                               if(parentNode.children('.child').length===0){
+                                    parentNode.append($("<ul class='child'></ul>"))
+                                              .removeClass("ExpandLeaf")
+                                              .addClass("ExpandOpen");
+
+                               }
+                               node.appendTo(parentNode.children('.child')).removeClass('drag');
+                        }
+                     },
+                     error: function(){
+                         console.log("Ошибка");
+                     }
+            });   
+        
+        
+        
+        
+        
+       
+       
+       
+           
+   });
+   
+   
+   
     $('#tree').on('click','div.add', function(event){
            var obj = $(this).parent()
                             .css({display:'none'})

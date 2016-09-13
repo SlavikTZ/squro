@@ -68,9 +68,17 @@ class ControllerTree extends Controller{
             if(isset($_GET['id'])&&isset($_GET['pid'])){
                $pid = $_GET['pid'];
                $id = $_GET['id'];
-               $pos = isset($_GET['pos'])&&$_GET['pos']==='sister' ? $_GET['pos']:'child';
-               $tree = new SimpleTree();
-               $tree->move($id, $pid, $pos);
+               if(isset($_GET['pos'])&&$_GET['pos']==='child'){
+                   $child=true;
+               }else{
+                   $child=false;
+               }
+               $tree = new NestedTree();
+               $result = $tree->move($id, $pid, $child);
+                if($this->isAjax()){
+                   echo $result;
+                   return;
+                }
                $this->actionView();
             }
         }

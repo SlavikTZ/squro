@@ -98,24 +98,27 @@ abstract class Object extends Model{
             throw new Exception("Не возможно обновить данные, поскольку нет ID в базе данных");
         }
         $strSQL = "UPDATE `".$this->_tableName."` SET ";
+        $i=0;
         while($columns = $result->fetchArray(SQLITE3_ASSOC)){
             foreach($columns as $column=>$value){
                 if($this->_valuesTable[$column]!==$value){
+                    $i++;
                     $strSQL .= "`".$column."`=:".$column.", ";
                     $tmp[$column]=$this->_valuesTable[$column];
                 }
             }
-            $strSQL = $strSQL = substr($strSQL, 0, strlen($strSQL)-2)
+            
+                $strSQL = $strSQL = substr($strSQL, 0, strlen($strSQL)-2)
                             ." WHERE id=".$this->id;
         }
-        echo $strSQL;
-         $stmt = $this->db->prepare($strSQL); 
-         debug($tmp);
-         foreach ($tmp as $column => $value) {
-             $stmt->bindValue(":".$column, $value, $this->_types[$this->_lablesTable[$column]]);
-         }
-         $result = $stmt->execute();
-         $stmt->close();
+        if($i>0){
+             $stmt = $this->db->prepare($strSQL); 
+                 foreach ($tmp as $column => $value) {
+                     $stmt->bindValue(":".$column, $value, $this->_types[$this->_lablesTable[$column]]);
+                 }
+             $result = $stmt->execute();
+             $stmt->close();
+        }
     }
     private function _select($id){
         $strSQL = "SELECT * FROM `{$this->_tableName}` WHERE id={$id}";
