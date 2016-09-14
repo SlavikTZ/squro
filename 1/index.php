@@ -1,11 +1,12 @@
 <?php
+error_reporting(E_ALL);
 $arr = range(0,12);
 $arr['x']="";
 $arr['y']="1";
 $arr['7']="";
 function getTable($arr, $numColumn=7){
     if(is_array($arr)&&($count = count($arr))!==0){
-        $rows = (int)($count/$numColumn)+1;
+        $rows = ceil($count/$numColumn);
         $str = "<table border=1>\n";
         $str .= "\t<tr>";
         $i=0;

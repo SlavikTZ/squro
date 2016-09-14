@@ -85,6 +85,7 @@ class ControllerTree extends Controller{
         public function actionView(){
             $tree = new NestedTree();
             $context = $tree->view(NULL);
+            //Напишу клас представления, которому передается файл представления и данные дерева
             include '../application/view/tree.php';
         }
         public function actionTest(){

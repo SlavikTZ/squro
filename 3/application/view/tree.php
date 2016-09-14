@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-md-7">
                     <ul id="tree">
-                        <?= $context; ?>  
+                        <?= $tree->view(); ?>  
                     </ul>
                 </div>
                 <div class="col-md-5">

@@ -10,7 +10,7 @@ class Db {
             Register::set('base', false);
         }
         if($db['database']==='sqli3'){
-        self::$db = new MySQLite3($db['path'].$db['file']);
+        self::$db = new MySQLITE3($db['path'].$db['file']);
         }else{
             //другое подключение 
             }
