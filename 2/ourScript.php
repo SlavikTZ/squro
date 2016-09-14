@@ -6,7 +6,7 @@ function getReferens($url){
         exit();
     }
     $absReferens = [];
-    preg_match('~((https?:)?\/\/[^\/]+)((\/[^\/]*)*)~si', $url, $match);
+    preg_match('~https?:\/\/[^\/]+)((\/[^\/]*)*)~si', $url, $match);
     $fullUrl = $match[0];
     $host = $match[1];
     $relativeUrl = preg_replace('~[^\/]+$~U', "" , $fullUrl);
